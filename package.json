@@ -1,6 +1,6 @@
 {
   "name": "express-router-printer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "To print all the express routers ",
   "main": "index.js",
   "scripts": {
