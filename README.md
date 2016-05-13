@@ -26,7 +26,7 @@ var options = {
     autoPrint: true
 };
 
-require(‘express-router-printer’)(server, options);
+require('express-router-printer')(server, options);
 
 
 ```
