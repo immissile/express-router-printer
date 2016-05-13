@@ -2,7 +2,7 @@
 // var server = express();
 
 var Table = require('cli-table');
-var lodash = require('lodash');
+var _ = require('lodash');
 
 module.exports = function (server, options) {
     var config  = _.assign({
