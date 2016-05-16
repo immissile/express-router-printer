@@ -7,6 +7,11 @@ var _ = require('lodash');
 module.exports = function (server, options) {
     var config  = _.assign({
         header: ['API PATH', 'API METHOD'],
+        style: {
+            compact: false,
+            head: ['cyan'],
+            //border: ['magenta'],
+        },
         showStatistics: true,
         autoPrint: true,
         otherRouters: []
@@ -39,8 +44,8 @@ module.exports = function (server, options) {
     }
 
     var table = new Table({
-        head: config.header
-        //colWidths: [100, 200]
+        head: config.header,
+        style: config.style
     });
 
     _.each(routers, function(r, i) {
