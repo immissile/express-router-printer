@@ -23,7 +23,10 @@ var options = {
     showStatistics: true,
 
     // auto print the table, if false, module will return the table object
-    autoPrint: true
+    autoPrint: true,
+
+    // other routeres
+    othersRouters: []
 };
 
 require('express-router-printer')(server, options);

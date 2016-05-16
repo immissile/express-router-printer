@@ -8,29 +8,42 @@ module.exports = function (server, options) {
     var config  = _.assign({
         header: ['API PATH', 'API METHOD'],
         showStatistics: true,
-        autoPrint: true
+        autoPrint: true,
+        otherRouters: []
     }, options);
 
-    var route, routes = [];
-    server._router.stack.forEach(function(middleware) {
-        if (middleware.route) {
-             // routes registered directly on the app
-            routes.push(middleware.route);
-        } else if (middleware.name === 'router') {
-            // router middleware
-            middleware.handle.stack.forEach(function(handler){
-                route = handler.route;
-                route && routes.push(route);
-            });
-        }
-    });
+    var routers = [], otherRouters = [];
+    if (config.otherRouters.length) {
+        _.each(config.otherRouters, function(r){
+            otherRouters = otherRouters.concat(parseRouters(r));
+        });
+    }
+
+    routers = otherRouters.concat(parseRouters(server._router))
+
+    function parseRouters (_routers) {
+        var route, routes = [];
+        _routers.stack.forEach(function(middleware) {
+            if (middleware.route) {
+                 // routes registered directly on the app
+                routes.push(middleware.route);
+            } else if (middleware.name === 'router') {
+                // router middleware
+                middleware.handle.stack.forEach(function(handler){
+                    route = handler.route;
+                    route && routes.push(route);
+                });
+            }
+        });
+        return routes;
+    }
 
     var table = new Table({
         head: config.header
         //colWidths: [100, 200]
     });
 
-    routes.forEach(function(r) {
+    _.each(routers, function(r, i) {
         var _method = null;
         for (var k in r.methods) {
             _method = k;
@@ -40,7 +53,7 @@ module.exports = function (server, options) {
     });
 
     if (config.showStatistics) {
-        table.push(['Total Number', routes.length]);
+        table.push(['Total Number', routers.length]);
     }
 
     if (config.autoPrint) {
@@ -49,14 +62,3 @@ module.exports = function (server, options) {
         return table;
     }
 };
-
-
-/*
-table.push(
-    ['First value', 'Second value'],
-    ['First value222', 'Second value222']
-);
-*/
-
-
-
